@@ -1,11 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
+  constructor(private prisma: PrismaService) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async create(data: CreateUserDto) {
+    await this.prisma.user.create({
+      data: {
+        email: 'teste@prisma',
+        name: 'teste',
+        password: '020-2',
+      },
+    });
     return 'This action adds a new user';
   }
 
@@ -17,7 +27,8 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  update(id: number, _updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
