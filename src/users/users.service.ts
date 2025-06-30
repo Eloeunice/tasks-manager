@@ -18,16 +18,23 @@ export class UsersService {
     return users;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const userFound: User | null = await this.prisma.user.findUnique({
+      where: { id: id },
+    });
+    return userFound;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(id: number, _updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const userUpdated = await this.prisma.user.update({
+      where: { id: id },
+      data: { email: updateUserDto.email, name: updateUserDto.name },
+    });
+    return userUpdated;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    await this.prisma.user.delete({ where: { id: id } });
+    return `User removed with success!`;
   }
 }
