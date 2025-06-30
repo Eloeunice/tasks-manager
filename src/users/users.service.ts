@@ -2,25 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { User } from 'generated/prisma';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async create(data: CreateUserDto) {
-    await this.prisma.user.create({
-      data: {
-        email: 'teste@prisma',
-        name: 'teste',
-        password: '020-2',
-      },
-    });
-    return 'This action adds a new user';
+  async create(user: CreateUserDto) {
+    const newUser: User = await this.prisma.user.create({ data: user });
+    return newUser;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    const users: User[] = await this.prisma.user.findMany();
+    return users;
   }
 
   findOne(id: number) {
